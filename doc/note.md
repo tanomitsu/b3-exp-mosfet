@@ -44,8 +44,4 @@ $$
 
 昭晃堂 - 「半導体デバイス入門 -その原理と動作のしくみ-」(柴田 正 著)…SS の
 
-![image5.jpg](./images/image5.jpg)
-
-![image6.jpg](./images/image6.jpg)
-
 - [x] Hf の方もできればよい
