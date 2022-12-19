@@ -1,3 +1,2 @@
 # plotted figure
-*.png
-*.jpg
+plot/**
