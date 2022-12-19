@@ -1,7 +1,10 @@
-function done = analyze(dat, ssRange)
+function done = analyze(dat, ssRange, filename)
     % default arg
     if ~exist('ssRange', 'var')
         ssRange = [-1, 2];
+    end
+    if ~exist('filename', 'var')
+        filename = "plot";
     end
 
     % plot the raw data
@@ -35,6 +38,8 @@ function done = analyze(dat, ssRange)
     tangent = [vth, 0; vg0, id0];
     line(tangent(:, 1), tangent(:, 2), "Color", "#808080");
     hold off;
+    save_filepath = sprintf("plot/day1/%s_Vg_Id.png", filename);
+    saveas(gcf, save_filepath);
 
     % calculate SS
     
@@ -44,14 +49,23 @@ function done = analyze(dat, ssRange)
     deltaLog10Id = abs(deltaLog10Id);
     ss = deltaVg ./ deltaLog10Id * 1e3;
     figure;
+    hold on;
     plot(vg, ss);
     xlabel("V_g [V]")
     xlim(ssRange);
     ylabel("SS [mV/decade]")
+    % plot theoretical value
+    u = symunit;
+    [e, ~] = separateUnits(unitConvert(u.e, 'SI'));
+    e = double(e);
+    [k, ~] = separateUnits(unitConvert(u.k_B, 'SI'));
+    k = double(k);
+    yline(log(10) * k * 293 * 1e3 / e);
+    legend("observed", "theoretical limit(t=20℃)");
+    hold off;
+    save_filepath = sprintf("plot/day1/%s_Vg_SS.png", filename);
+    saveas(gcf, save_filepath);
 
-    % idで範囲絞り込み
-    vg((id >= 1e-4) & (id <= 1e-3));
-    sprintf("vg = %f\n", vg);
     minSS = min(ss((vg >= ssRange(1)) & (vg <= ssRange(2))));
 
     vg_minSS = vg(ss == minSS);
